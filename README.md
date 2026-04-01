@@ -35,7 +35,6 @@ Easy way:
 
 
 Not compiled file way: 
-![insctrusction](https://github.com/user-attachments/assets/7bc28979-c09a-46dc-ae13-78c986a92111)
 1. Install AutoHotkey v2 from autohotkey.com
 
 2. Download Vim CapsLock arrows.ahk
@@ -46,3 +45,5 @@ Not compiled file way:
 with Windows).
 
 5. Run the script (double-click the file).
+
+![insctrusction](https://github.com/user-attachments/assets/7bc28979-c09a-46dc-ae13-78c986a92111)
