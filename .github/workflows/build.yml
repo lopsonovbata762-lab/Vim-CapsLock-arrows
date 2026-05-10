@@ -1,21 +1,25 @@
-name: Auto-Compile AHK
-on: [push] # Запускать сборку при каждом обновлении кода
+name: Build and Release
+on:
+  push:
+    tags:
+      - 'v*' # Сработает при создании тега, например v1.0
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Compile AHK to EXE
-        uses: logicxd/ahk-compiler-action@v2
+      - name: Compile AHK Script
+        uses: CCCC-L/Action-Ahk2Exe@main # Специальный экшен для AHK v2
         with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
-          script: "VimCapslockArrows.ahk" # Название вашего файла из скриншота
+          in: Vim-CapsLock-arrows.ahk
+          out: Vim-CapsLock-arrows.exe
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Compiled-Script
-          path: VimCapslockArrows.exe
+          files: Vim-CapsLock-arrows.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
