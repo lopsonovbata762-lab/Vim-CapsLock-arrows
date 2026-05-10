@@ -2,71 +2,66 @@
 #SingleInstance Force
 
 ; ==============================================================================
-; Vim-style Navigation + Home Row Modifiers (AHK v2)
+; Vim Navigation Layer (Stable Clean Version)
 ; ==============================================================================
 
+; --- SETTINGS ---
 SetCapsLockState "AlwaysOff"
 
-; --- Startup Notification ---
-MyGui := Gui("+AlwaysOnTop -Caption +ToolWindow")
-MyGui.BackColor := "1a1a1a"
-MyGui.SetFont("s14 cWhite w700", "Segoe UI")
-MyGui.Add("Text",, "Vim Navigation Active")
-MyGui.Show("xCenter y20 NoActivate")
-SetTimer (*) => MyGui.Destroy(), 2000
+; ==============================================================================
+; INIT
+; ==============================================================================
 
-; --- Auto-Enable Startup Logic ---
-startupLnk := A_Startup "\VimNavigation.lnk"
+InitTray()
 
-if !FileExist(startupLnk) {
-    FileCreateShortcut(A_ScriptFullPath, startupLnk)
-    TrayTip "Vim Navigation", "Enabled automatically on startup", "Iconi"
-}
+; ==============================================================================
+; CAPSLOCK TAP VS HOLD
+; ==============================================================================
 
-; --- CapsLock Behavior Logic ---
 *CapsLock::
 {
-    KeyWait "CapsLock"
-    if (A_PriorKey = "CapsLock")
-    {
-        new_state := !GetKeyState("CapsLock", "T")
-        SetCapsLockState(new_state ? "AlwaysOn" : "AlwaysOff")
+    ; Tap = toggle CapsLock
+    if KeyWait("CapsLock", "T0.2") {
+        state := !GetKeyState("CapsLock", "T")
+        SetCapsLockState(state ? "AlwaysOn" : "AlwaysOff")
     }
 }
 
-; --- Navigation Layer ---
+; ==============================================================================
+; NAVIGATION LAYER
+; ==============================================================================
+
 #HotIf GetKeyState("CapsLock", "P")
 
-Modifier() {
-    mod := ""
+GetMods() {
+    mods := ""
     if GetKeyState("s", "P")
-        mod .= "^"  
+        mods .= "^"   ; Ctrl
     if GetKeyState("d", "P")
-        mod .= "+"  
-    return mod
+        mods .= "+"   ; Shift
+    return mods
 }
 
-*i::Send(Modifier() "{Up}")
-*j::Send(Modifier() "{Left}")
-*k::Send(Modifier() "{Down}")
-*l::Send(Modifier() "{Right}")
-*u::Send(Modifier() "{Home}")
-*o::Send(Modifier() "{End}")
+*i::SendInput "{Blind}" GetMods() "{Up}"
+*j::SendInput "{Blind}" GetMods() "{Left}"
+*k::SendInput "{Blind}" GetMods() "{Down}"
+*l::SendInput "{Blind}" GetMods() "{Right}"
 
-*s::return 
+*u::SendInput "{Blind}" GetMods() "{Home}"
+*o::SendInput "{Blind}" GetMods() "{End}"
+
+*s::return
 *d::return
 
 #HotIf
 
-; --- Tray Menu Management ---
-A_TrayMenu.Add() ; Separator
-A_TrayMenu.Add("Run at Startup", ToggleStartup)
+; ==============================================================================
+; TRAY MENU
+; ==============================================================================
 
-; Update menu checkmark based on current state
-if FileExist(startupLnk)
-    A_TrayMenu.Check("Run at Startup")
+InitTray() {
+    A_TrayMenu.Delete() ; очистить меню полностью
 
-ToggleStartup(*) {
-    if FileExist(startupLnk) {
-        FileDelete(startupLnk)
-        A_TrayMenu.Uncheck("Run at Startup")
+    A_TrayMenu.Add("Reload", (*) => Reload())
+    A_TrayMenu.Add("Exit", (*) => ExitApp())
+}
