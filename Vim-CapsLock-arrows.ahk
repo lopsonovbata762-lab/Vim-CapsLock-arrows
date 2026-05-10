@@ -65,4 +65,4 @@ InitTray() {
     A_TrayMenu.Add("Reload", (*) => Reload())
     A_TrayMenu.Add("Exit", (*) => ExitApp())
 }
-; check2
+; check3
