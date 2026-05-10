@@ -21,29 +21,3 @@ How it works:
 · D (Modifier): Acts as Shift while in navigation mode (select text).
 
 . S + D: Combine both to select text word-by-word.
-
-
-
-Installation:
-Installation:
-Installation:
-
-Easy way:
-1. Open compiled Vim CapsLock arrows.exe
-![COOL](https://github.com/user-attachments/assets/91967f96-bd68-4b79-be7e-77c9bac8757a)
-
-
-
-Not compiled file way: 
-1. Install AutoHotkey v2 from autohotkey.com
-
-2. Download Vim CapsLock arrows.ahk
-
-3. Press Win + R, type shell: startup , and hit Enter.
-
-4. Move Vim CapsLock arrows.ahk into the folder that opened (this ensures the script starts
-with Windows).
-
-5. Run the script (double-click the file).
-
-![insctrusction](https://github.com/user-attachments/assets/7bc28979-c09a-46dc-ae13-78c986a92111)
