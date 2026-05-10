@@ -1,8 +1,11 @@
 name: Build and Release
 on:
   push:
-    tags:
-      - 'v*' # Сработает при создании тега, например v1.0
+    branches:
+      - main  # Запускать при каждом пуше в основную ветку
+
+permissions:
+  contents: write # ЭТО ВАЖНО: разрешает экшену создавать релизы
 
 jobs:
   build:
