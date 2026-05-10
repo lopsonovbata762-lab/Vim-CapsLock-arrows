@@ -1,0 +1,27 @@
+name: Compile AHK to EXE
+on:
+  push:
+    tags:
+      - 'v*' # Сборка будет запускаться, когда вы создаете тег (например, v1.0)
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Compile AHK
+        uses: miniers/ahk-compiler-action@v1
+        with:
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          # Укажите имя вашего файла ниже
+          script: "VimCapslockArrows.ahk" 
+          executable: "VimCapslockArrows.exe"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: VimCapslockArrows.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
